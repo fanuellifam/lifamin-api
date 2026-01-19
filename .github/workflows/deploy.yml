@@ -1,0 +1,37 @@
+name: Deploy API to MicroK8s
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: liyayi/api:latest
+
+      - name: Deploy to Kubernetes
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: lifam
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            microk8s kubectl set image deployment/api api=liyayi/api:latest -n app
+            microk8s kubectl rollout status deployment/api -n app
