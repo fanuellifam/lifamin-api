@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: liyayi/api:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          value: "3000"
+        - name: DB_HOST
+          value: "127.0.0.1"
+        - name: DB_NAME
+          value: "app_db"
+        - name: DB_USER
+          value: "app_user"
+        - name: DB_PASS
+          value: "STRONG_PASSWORD_HERE"
