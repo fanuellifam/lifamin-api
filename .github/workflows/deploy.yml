@@ -36,3 +36,4 @@ jobs:
             microk8s kubectl set image deployment/api api=$IMAGE_NAME:$IMAGE_TAG -n web
             microk8s kubectl rollout status deployment/api -n web
 # trigger ci
+# trigger
