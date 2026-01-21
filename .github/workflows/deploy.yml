@@ -37,3 +37,4 @@ jobs:
             microk8s kubectl rollout status deployment/api -n web
 # trigger ci
 # trigger
+# trigger again
